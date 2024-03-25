@@ -23,6 +23,7 @@ Quando eu concluir uma tarefa tem que marcar a hora que foi concluida.
 - Deletar tarefas em lote
 - Quantidade de tarefas pendentes
 - Quantidade de tarefas completas
+- Atualização em realtime usando websocket ou SSE
 
 ### Estrutura
 
