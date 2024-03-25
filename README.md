@@ -1,106 +1,53 @@
-# Todo Test - Backend NodeJS
+# Desafio Back-End: Construção de API para Lista de Tarefas
 
-## Plataforma
-TodoApp é um aplicativo de lista de tarefas, a idéia é criar um aplicativo onde posso adicionar itens a serem feitos.
-O item deve ter um status de pendente e concluído.
-Quando eu concluir uma tarefa tem que marcar a hora que foi concluida.
+## Requisitos
 
-> Exemplo da aplicação
+Neste desafio, você será responsável por desenvolver uma API REST para uma aplicação de lista de tarefas.
+Para isso você devá utilizar das seguintes tecnologias:
 
-- [x] Tarefa #1
-- [x] Tarefa #1
-- [ ] Tarefa #1
-- [x] Tarefa #1
-- [ ] Tarefa #1
+- NodeJS
+- Typescript
+- MongoDB
+- Websocket
+- Fastify
 
-## Features
-- Listar tarefas
-- Criar uma tarefa
-- Atualizar a descrição de uma tarefa
-- Atualizar status da tarefa,
-- Deletar uma tarefa
-- Completar tarefas em lote
-- Deletar tarefas em lote
-- Quantidade de tarefas pendentes
-- Quantidade de tarefas completas
-- Atualização em realtime usando websocket ou SSE
+## Desafio
 
-### Estrutura
+O desafio consiste na construção de uma API REST para um aplicativo de lista de tarefas chamado TodoApp. Este aplicativo tem como objetivo permitir que os usuários gerenciem suas tarefas diárias, podendo adicioná-las, atualizá-las, marcá-las como concluídas e excluí-las conforme necessário. Cada tarefa deve ter um texto descritivo, um status indicando se está pendente ou concluída, bem como registros de data e hora de criação e, quando aplicável, de conclusão.
 
-**Requisitos**
-> Todas as rotas devem ter o prefixo /api (Exemplo: http://localhost:3000/api/list)
-> As rotas devem seguir o padrão REST
+### Funcionalidades Principais
 
-Todo Schema
-```ts
+- **Listar Tarefas:** Esta funcionalidade permite aos usuários recuperarem todas as tarefas armazenadas no sistema. Se necessário, a listagem pode ser paginada para melhorar a experiência do usuário.
+
+- **Criar uma Tarefa:** Os usuários podem adicionar novas tarefas ao sistema fornecendo apenas o texto descritivo da tarefa. O status da tarefa é automaticamente definido como pendente no momento da criação.
+
+- **Atualizar a Descrição de uma Tarefa:** Os usuários têm a capacidade de modificar o texto descritivo de uma tarefa existente, fornecendo o ID da tarefa a ser atualizada e o novo texto.
+
+- **Atualizar o Status de uma Tarefa:** Esta funcionalidade permite aos usuários marcarem uma tarefa como concluída ou pendente, fornecendo o ID da tarefa e o novo status.
+
+- **Deletar uma Tarefa:** Os usuários podem excluir uma tarefa específica fornecendo o ID correspondente.
+
+- **Completar Tarefas em Lote:** Além de atualizar o status de uma única tarefa, os usuários podem marcar várias tarefas como concluídas ou pendentes, fornecendo uma lista de IDs das tarefas e o novo status desejado.
+
+- **Deletar Tarefas em Lote:** Da mesma forma que é possível completar tarefas em lote, os usuários também podem excluir várias tarefas simultaneamente fornecendo uma lista de IDs das tarefas a serem removidas.
+
+- **Obter Quantidade de Tarefas Pendentes e Concluídas:** Esta funcionalidade fornece aos usuários informações sobre o número total de tarefas pendentes e concluídas no sistema.
+
+- **Atualização em Tempo Real:** Para melhorar a experiência do usuário, a aplicação deve ser capaz de fornecer atualizações em tempo real utilizando WebSockets.
+
+## Estrutura da API
+
+### Requisitos
+
+- Todas as rotas devem seguir o padrão REST e ter o prefixo /api (por exemplo: http://localhost:3000/api/list).
+
+### Estrutura do Objeto de Tarefa (Todo)
+
+```typescript
 type Todo = {
   body: string;
-  completed: string;
-  completedAt: Date;
-  createdAt: Date; // Timestamp
-  updatedAt: Date; // Timestamp
+  completed: boolean;
+  completedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
-```
-
-### Listar tarefas
-
-Preciso de uma rota que retorne todas as tarefas do banco de dados.
-
-> Se esta rota aceitar paginação receberá pontos extras. (Pode ser via skip&limit ou informando a página, faça o que preferir)
-
-### Criar uma tarefa
-
-Preciso de uma rota onde irei enviar apenas o texto do item do Todo
-
-### Atualizar a descrição de uma tarefa
-
-Preciso de uma rota onde irei enviar o id do item a ser atualizado e o novo texto para atualizar
-
-### Atualizar status da tarefa,
-
-Preciso de uma rota onde irei enviar o status da tarefa (completed: true | false)
-
-### Deletar uma tarefa
-
-Preciso de uma rota onde vou enviar o id do item que quero deletar
-
-### Completar tarefas em lote
-
-Preciso de um rota onde vou enviar vários ids de itens e o status para ser atualizado (completed: true | false)
-
-### Deletar tarefas em lote
-
-Preciso de um rota onde vou enviar vários ids para serem deletados.
-
-### Quantidade de tarefas pendentes
-
-Preciso de uma rota que me retorne a quantidade de tarefas pendentes.
-
-### Quantidade de tarefas completas
-
-Preciso de uma rota que me retorne a quantidade de tarefas completas.
-
-<hr>
-
-## Extra #1
-
-Preciso de uma rota de relação data de tarefas completas.
-
-Exemplo do retorno
-```ts
-type CompletedTodosByDate = {
-  "01-01-2022": [],
-  "02-01-2022": [],
-  "03-01-2022": [],
-}
-```
-
-## Extra #2
-
-Atualmente temos uma rota que trás informações de alguns usuários, porém, está api está retornando em inglês, precisamos criar uma API nossa que retorne as mesmas informações, porém, em português.
-A rota também considera que o usuário é adulto quando sua idade for 21, devemos atualizar para considerar adulto idades superiores a 17 e guardar como "adulto americano" se for superior a 20
-
-A rota que possuimos é a seguinte.
-> https://api.toitdrop.com/mock/users
-
-A rota a ser criada deve ser `/usuarios`
