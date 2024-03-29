@@ -21,7 +21,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // This will load every route in src/routes
   void fastify.register(AutoLoad, {
     dir: join(__dirname, 'routes'),
-    options: opts,
+    options: { ...opts, prefix: '/api' },
   })
 }
 
