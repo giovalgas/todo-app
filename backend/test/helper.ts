@@ -3,9 +3,9 @@ const helper = require('fastify-cli/helper.js')
 import * as path from 'path'
 import * as test from 'node:test'
 
-export type TestContext = {
+export interface TestContext {
   after: typeof test.after
-};
+}
 
 const AppPath = path.join(__dirname, '..', 'src', 'app.ts')
 
