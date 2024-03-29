@@ -28,9 +28,11 @@
     "@types/node": "^20.4.4",
     "c8": "^9.0.0",
     "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
     "fastify-tsconfig": "^2.0.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.4.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.3",
+    "typescript-eslint": "^7.4.0"
   }
 }
