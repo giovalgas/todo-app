@@ -1,4 +1,4 @@
-export default interface TodoUpdateStatusRequestDto {
+export default interface TodoUpdateStatusRequestDTO {
   idList: number[] | undefined
   completed: boolean
 }

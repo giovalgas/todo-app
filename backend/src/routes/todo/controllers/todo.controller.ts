@@ -1,6 +1,6 @@
 import { FastifyReply } from 'fastify'
 import PaginationDTO from '../../../common/page/dto/pagination.dto'
-import TodoRequestDTO from '../dtos/request/todo-request.dto'
+import TodoRequestDTO from '../dtos/request/todo-request-dto'
 import TodoUpdateStatusRequestDTO from '../dtos/request/todo-update-status-request.dto'
 import TodoDeleteRequestDTO from '../dtos/request/todo-delete-request.dto'
 import todoService from '../services/todo.service'

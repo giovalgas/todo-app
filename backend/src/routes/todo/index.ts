@@ -1,5 +1,3 @@
-import { FastifyPluginAsync } from 'fastify'
+import todoRoutes from './routes/todo.routes'
 
-const todo: FastifyPluginAsync | null = null
-
-export default todo
+export default todoRoutes

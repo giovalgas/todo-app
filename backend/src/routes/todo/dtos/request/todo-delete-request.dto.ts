@@ -1,3 +1,3 @@
-export default interface TodoDeleteRequestDto {
+export default interface TodoDeleteRequestDTO {
   idList: number[]
 }
