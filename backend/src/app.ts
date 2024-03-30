@@ -1,6 +1,11 @@
 import { join } from 'path'
 import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload'
-import { FastifyPluginAsync, FastifyServerOptions } from 'fastify'
+import {
+  FastifyInstance,
+  FastifyPluginAsync,
+  FastifyServerOptions,
+} from 'fastify'
+import fastifyEnv from './plugins/env'
 
 export interface AppOptions
   extends FastifyServerOptions,
@@ -9,9 +14,12 @@ export interface AppOptions
 const options: AppOptions = {}
 
 const app: FastifyPluginAsync<AppOptions> = async (
-  fastify,
+  fastify: FastifyInstance,
   opts
 ): Promise<void> => {
+  // This will load fastify-env plugin
+  void fastify.register(fastifyEnv)
+
   // This will load every fastify plugin in src/plugins
   void fastify.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
