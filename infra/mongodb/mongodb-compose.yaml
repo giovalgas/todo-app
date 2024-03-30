@@ -1,0 +1,15 @@
+networks:
+  mongo-compose-network:
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/data/db
+    networks:
+      - mongo-compose-network

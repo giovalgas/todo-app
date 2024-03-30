@@ -63,3 +63,6 @@ test/types/index.js
 
 # compiled app
 dist
+
+# MongoDB docker storage
+infra/mongodb/database
