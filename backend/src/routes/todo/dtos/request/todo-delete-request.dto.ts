@@ -1,5 +1,7 @@
-import { mongodb } from '@fastify/mongodb'
+import { Static, Type } from '@sinclair/typebox'
 
-export default interface TodoDeleteRequestDTO {
-  idList: mongodb.ObjectId[]
-}
+export const TodoDeleteRequestDTOSchema = Type.Object({
+  idList: Type.Array(Type.Uint8Array()),
+})
+
+export type TodoDeleteRequestDTO = Static<typeof TodoDeleteRequestDTOSchema>

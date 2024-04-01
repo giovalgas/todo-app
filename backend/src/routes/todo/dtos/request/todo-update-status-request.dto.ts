@@ -1,6 +1,10 @@
-import { mongodb } from '@fastify/mongodb'
+import { Static, Type } from '@sinclair/typebox'
 
-export default interface TodoUpdateStatusRequestDTO {
-  idList: mongodb.ObjectId[] | undefined
-  completed: boolean
-}
+export const TodoUpdateStatusRequestDTOSchema = Type.Object({
+  idList: Type.Optional(Type.Array(Type.Uint8Array())),
+  completed: Type.Boolean(),
+})
+
+export type TodoUpdateStatusRequestDTO = Static<
+  typeof TodoUpdateStatusRequestDTOSchema
+>
