@@ -1,4 +1,4 @@
 export default interface PaginationDTO {
-  page: string
-  pageSize: string
+  page: number
+  pageSize: number
 }

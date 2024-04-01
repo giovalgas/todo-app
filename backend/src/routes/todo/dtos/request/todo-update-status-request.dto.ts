@@ -1,4 +1,6 @@
+import { mongodb } from '@fastify/mongodb'
+
 export default interface TodoUpdateStatusRequestDTO {
-  idList: number[] | undefined
+  idList: mongodb.ObjectId[] | undefined
   completed: boolean
 }

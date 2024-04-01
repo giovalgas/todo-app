@@ -1,3 +1,5 @@
+import { mongodb } from '@fastify/mongodb'
+
 export default interface TodoDeleteRequestDTO {
-  idList: number[]
+  idList: mongodb.ObjectId[]
 }

@@ -4,66 +4,49 @@ import TodoUpdateStatusRequestDTO from '../dtos/request/todo-update-status-reque
 import TodoDeleteRequestDTO from '../dtos/request/todo-delete-request.dto'
 import TodoResponseDTO from '../dtos/response/todo-response.dto'
 import Page from '../../../common/page/model/page.model'
+import todoRepository from '../repositories/todo.repository'
+import { mongodb } from '@fastify/mongodb'
 
 const todoService = {
-  findTodos: (requestDTO: PaginationDTO): Page<TodoResponseDTO> => {
-    requestDTO
-    return { count: 10, list: [] }
-  },
-
-  createTodo: (requestDTO: TodoRequestDTO): TodoResponseDTO => {
-    requestDTO
-
+  findTodos: async (
+    requestDTO: PaginationDTO
+  ): Promise<Page<TodoResponseDTO>> => {
     return {
-      body: '',
-      createdAt: new Date(),
-      completed: false,
-      completedAt: new Date(),
-      updatedAt: new Date(),
+      count: await todoRepository.findTodoCount(),
+      list: await todoRepository.findTodos(requestDTO),
     }
   },
 
-  updateTodoDescription: (
+  createTodo: async (requestDTO: TodoRequestDTO): Promise<TodoResponseDTO> => {
+    return await todoRepository.createTodo(requestDTO)
+  },
+
+  updateTodoDescription: async (
     requestDTO: TodoRequestDTO,
-    id: number
-  ): TodoResponseDTO => {
-    requestDTO
-    id
-
-    return {
-      body: '',
-      createdAt: new Date(),
-      completed: false,
-      completedAt: new Date(),
-      updatedAt: new Date(),
-    }
+    id: mongodb.ObjectId
+  ): Promise<TodoResponseDTO> => {
+    return await todoRepository.updateTodoDescription(id, requestDTO.body)
   },
 
-  updateTodoStatus: (
+  updateTodoStatus: async (
     requestDTO: TodoUpdateStatusRequestDTO,
-    id: number
-  ): TodoResponseDTO => {
-    id
-    requestDTO
-
-    return {
-      body: '',
-      createdAt: new Date(),
-      completed: false,
-      completedAt: new Date(),
-      updatedAt: new Date(),
-    }
+    id: mongodb.ObjectId
+  ): Promise<TodoResponseDTO> => {
+    return await todoRepository.updateTodoStatus(id, requestDTO.completed)
   },
 
-  deleteTodo: (id: number): void => {
-    id
+  deleteTodo: (id: mongodb.ObjectId): void => {
+    todoRepository.deleteTodo(id)
   },
 
-  batchUpdateTodoStatus: (
+  batchUpdateTodoStatus: async (
     requestDTO: TodoUpdateStatusRequestDTO
-  ): TodoResponseDTO[] => {
-    return requestDTO.idList!.map(
-      (id): TodoResponseDTO => todoService.updateTodoStatus(requestDTO, id)
+  ): Promise<TodoResponseDTO[]> => {
+    return Promise.all(
+      requestDTO.idList!.map(
+        async (id): Promise<TodoResponseDTO> =>
+          await todoService.updateTodoStatus(requestDTO, id)
+      )
     )
   },
 

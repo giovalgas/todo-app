@@ -7,7 +7,7 @@ import mongodb, { FastifyMongodbOptions } from '@fastify/mongodb'
  * @see https://github.com/fastify/fastify-mongodb
  */
 export default fp<FastifyMongodbOptions>(async (fastify) => {
-  fastify.register(mongodb, {
+  await fastify.register(mongodb, {
     database: fastify.config.DB_DATABASE,
     url: `mongodb://${fastify.config.DB_HOST}:${fastify.config.DB_PORT}`,
     auth: {

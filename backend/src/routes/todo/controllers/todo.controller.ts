@@ -4,9 +4,10 @@ import TodoRequestDTO from '../dtos/request/todo-request-dto'
 import TodoUpdateStatusRequestDTO from '../dtos/request/todo-update-status-request.dto'
 import TodoDeleteRequestDTO from '../dtos/request/todo-delete-request.dto'
 import todoService from '../services/todo.service'
+import { mongodb } from '@fastify/mongodb'
 
 const todoController = {
-  findTodos: (reply: FastifyReply, requestDTO: PaginationDTO) => {
+  findTodos: function (reply: FastifyReply, requestDTO: PaginationDTO) {
     return reply.send(todoService.findTodos(requestDTO))
   },
 
@@ -17,7 +18,7 @@ const todoController = {
   updateTodoDescription: (
     reply: FastifyReply,
     requestDTO: TodoRequestDTO,
-    id: number
+    id: mongodb.ObjectId
   ) => {
     return reply.send(todoService.updateTodoDescription(requestDTO, id))
   },
@@ -25,7 +26,7 @@ const todoController = {
   updateTodoStatus: (
     reply: FastifyReply,
     requestDTO: TodoUpdateStatusRequestDTO,
-    id: number
+    id: mongodb.ObjectId
   ) => {
     return reply.send(todoService.updateTodoStatus(requestDTO, id))
   },
