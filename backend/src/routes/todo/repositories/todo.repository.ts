@@ -1,30 +1,33 @@
 import { mongodb } from '@fastify/mongodb'
 import { TodoRequestDTO } from '../dtos/request/todo-request-dto'
 import { PaginationDTO } from '../../../common/page/dto/pagination.dto'
-import { Todo } from '../../../entities/todo'
+import { ObjectIdType } from '../../../common/schema/objectid.schema'
+import TodoEntity from '../../../entities/todo.entity'
 
 export interface TodoRepository {
-  createTodo: (todo: TodoRequestDTO) => Promise<Todo>
+  createTodo: (todo: TodoRequestDTO) => Promise<TodoEntity>
   findTodoCount: () => Promise<number>
-  findTodos: (page: PaginationDTO) => Promise<Todo[]>
-  updateTodoStatus: (id: Uint8Array, newStatus: boolean) => Promise<Todo>
-  deleteTodo: (id: Uint8Array) => void
+  findTodos: (page: PaginationDTO) => Promise<TodoEntity[]>
+  updateTodoStatus: (
+    id: ObjectIdType,
+    newStatus: boolean
+  ) => Promise<TodoEntity>
+  deleteTodo: (id: ObjectIdType) => void
   updateTodoDescription: (
-    id: Uint8Array,
+    id: ObjectIdType,
     newDescription: string
-  ) => Promise<Todo>
+  ) => Promise<TodoEntity>
 }
 
 const todoRepository = function ({
   collection,
 }: {
-  collection: mongodb.Collection<Todo>
+  collection: mongodb.Collection<TodoEntity>
 }): TodoRepository {
   return {
-    createTodo: async (todo: TodoRequestDTO): Promise<Todo> => {
+    createTodo: async (todo: TodoRequestDTO): Promise<TodoEntity> => {
       const insertedId = await collection
         .insertOne({
-          _id: mongodb.ObjectId.generate(),
           body: todo.body,
           createdAt: new Date(),
           completed: false,
@@ -41,7 +44,7 @@ const todoRepository = function ({
       return collection.countDocuments()
     },
 
-    findTodos: async (page: PaginationDTO): Promise<Todo[]> => {
+    findTodos: async (page: PaginationDTO): Promise<TodoEntity[]> => {
       return collection
         .find()
         .skip(page.page - 1)
@@ -50,38 +53,52 @@ const todoRepository = function ({
     },
 
     updateTodoStatus: async (
-      id: Uint8Array,
+      id: ObjectIdType,
       newStatus: boolean
-    ): Promise<Todo> => {
+    ): Promise<TodoEntity> => {
       const updatedDocument = await collection.findOneAndUpdate(
-        { _id: id },
+        { _id: new mongodb.ObjectId(id) },
         {
-          completed: newStatus,
-          updatedAt: new Date(),
-          completedAt: newStatus ? new Date() : null,
-        }
+          $set: {
+            completed: newStatus,
+            updatedAt: new Date(),
+            completedAt: newStatus ? new Date() : undefined,
+          },
+        },
+        { returnDocument: 'after' }
       )
+
+      if (!updatedDocument) {
+        throw Error(`No todos by the id: ${id} where found.`)
+      }
 
       return updatedDocument!
     },
 
     updateTodoDescription: async (
-      id: Uint8Array,
+      id: ObjectIdType,
       newDescription: string
-    ): Promise<Todo> => {
+    ): Promise<TodoEntity> => {
       const updatedDocument = await collection.findOneAndUpdate(
-        { _id: id },
+        { _id: new mongodb.ObjectId(id) },
         {
-          body: newDescription,
-          updatedAt: new Date(),
-        }
+          $set: {
+            body: newDescription,
+            updatedAt: new Date(),
+          },
+        },
+        { returnDocument: 'after' }
       )
+
+      if (!updatedDocument) {
+        throw Error(`No todos by the id: ${id} where found.`)
+      }
 
       return updatedDocument!
     },
 
-    deleteTodo: (id: Uint8Array) => {
-      collection.deleteOne({ _id: id })
+    deleteTodo: (id: ObjectIdType) => {
+      collection.deleteOne({ _id: new mongodb.ObjectId(id) })
     },
   }
 }

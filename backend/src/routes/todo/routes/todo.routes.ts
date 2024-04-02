@@ -13,7 +13,7 @@ import {
   PaginationDTO,
   PaginationDTOSchema,
 } from '../../../common/page/dto/pagination.dto'
-import { Page, PageSchema } from '../../../common/page/model/page.model'
+import { Page } from '../../../common/page/model/page.model'
 import { Type } from '@sinclair/typebox'
 import {
   TodoUpdateStatusRequestDTO,
@@ -23,6 +23,10 @@ import {
   TodoDeleteRequestDTO,
   TodoDeleteRequestDTOSchema,
 } from '../dtos/request/todo-delete-request.dto'
+import {
+  ObjectIdSchema,
+  ObjectIdType,
+} from '../../../common/schema/objectid.schema'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -54,9 +58,6 @@ const todoRoutes: FastifyPluginAsync = async (
     {
       schema: {
         querystring: PaginationDTOSchema,
-        response: {
-          200: PageSchema<typeof TodoResponseDTOSchema>,
-        },
       },
     },
     async function (request, reply) {
@@ -82,14 +83,14 @@ const todoRoutes: FastifyPluginAsync = async (
   fastify.patch<{
     Body: TodoRequestDTO
     Reply: TodoResponseDTO
-    Params: { id: Uint8Array }
+    Params: { id: ObjectIdType }
   }>(
     '/:id',
     {
       schema: {
         body: TodoRequestDTOSchema,
         response: { 200: TodoResponseDTOSchema },
-        params: Type.Object({ id: Type.Uint8Array() }),
+        params: Type.Object({ id: ObjectIdSchema }),
       },
     },
     async function (request, reply) {
@@ -105,14 +106,14 @@ const todoRoutes: FastifyPluginAsync = async (
   fastify.patch<{
     Body: TodoUpdateStatusRequestDTO
     Reply: TodoResponseDTO
-    Params: { id: Uint8Array }
+    Params: { id: ObjectIdType }
   }>(
     '/update-status/:id',
     {
       schema: {
         body: TodoUpdateStatusRequestDTOSchema,
         response: { 200: TodoResponseDTOSchema },
-        params: Type.Object({ id: Type.Uint8Array() }),
+        params: Type.Object({ id: ObjectIdSchema }),
       },
     },
     async function (request, reply) {
@@ -140,9 +141,9 @@ const todoRoutes: FastifyPluginAsync = async (
     }
   )
 
-  fastify.delete<{ Params: { id: Uint8Array } }>(
+  fastify.delete<{ Params: { id: ObjectIdType } }>(
     '/:id',
-    { schema: { params: Type.Object({ id: Type.Uint8Array() }) } },
+    { schema: { params: Type.Object({ id: ObjectIdSchema }) } },
     async function (request, reply) {
       this.todoService.deleteTodo(request.params['id'])
       return reply.status(204).send()

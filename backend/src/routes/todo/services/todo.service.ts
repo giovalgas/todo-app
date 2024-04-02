@@ -8,6 +8,8 @@ import {
 } from '../dtos/response/todo-response.dto'
 import { TodoUpdateStatusRequestDTO } from '../dtos/request/todo-update-status-request.dto'
 import { TodoDeleteRequestDTO } from '../dtos/request/todo-delete-request.dto'
+import { ObjectIdType } from '../../../common/schema/objectid.schema'
+import todoMapper from '../mappers/todo.mapper'
 
 export interface TodoService {
   findTodos: (
@@ -17,13 +19,13 @@ export interface TodoService {
   batchDeleteTodos: (requestDTO: TodoDeleteRequestDTO) => void
   updateTodoDescription: (
     requestDTO: TodoRequestDTO,
-    id: Uint8Array
+    id: ObjectIdType
   ) => Promise<TodoResponseDTO>
   updateTodoStatus: (
     requestDTO: TodoUpdateStatusRequestDTO,
-    id: Uint8Array
+    id: ObjectIdType
   ) => Promise<TodoResponseDTO>
-  deleteTodo: (id: Uint8Array) => void
+  deleteTodo: (id: ObjectIdType) => void
   batchUpdateTodoStatus: (
     requestDTO: TodoUpdateStatusRequestDTO
   ) => Promise<TodoResponseDTO[]>
@@ -40,31 +42,39 @@ const todoService = function ({
     ): Promise<Page<typeof TodoResponseDTOSchema>> {
       return {
         count: await todoRepository.findTodoCount(),
-        list: await todoRepository.findTodos(requestDTO),
+        list: await todoRepository
+          .findTodos(requestDTO)
+          .then((todos) => todos.map((todo) => todoMapper.fromEntity(todo))),
       }
     },
 
     createTodo: async function (
       requestDTO: TodoRequestDTO
     ): Promise<TodoResponseDTO> {
-      return await todoRepository.createTodo(requestDTO)
+      return await todoRepository
+        .createTodo(requestDTO)
+        .then((todo) => todoMapper.fromEntity(todo))
     },
 
     updateTodoDescription: async function (
       requestDTO: TodoRequestDTO,
-      id: Uint8Array
+      id: ObjectIdType
     ): Promise<TodoResponseDTO> {
-      return await todoRepository.updateTodoDescription(id, requestDTO.body)
+      return await todoRepository
+        .updateTodoDescription(id, requestDTO.body)
+        .then((todo) => todoMapper.fromEntity(todo))
     },
 
     updateTodoStatus: async function (
       requestDTO: TodoUpdateStatusRequestDTO,
-      id: Uint8Array
+      id: ObjectIdType
     ): Promise<TodoResponseDTO> {
-      return await todoRepository.updateTodoStatus(id, requestDTO.completed)
+      return await todoRepository
+        .updateTodoStatus(id, requestDTO.completed)
+        .then((todo) => todoMapper.fromEntity(todo))
     },
 
-    deleteTodo: function (id: Uint8Array): void {
+    deleteTodo: function (id: ObjectIdType): void {
       todoRepository.deleteTodo(id)
     },
 

@@ -1,7 +1,8 @@
 import { Static, Type } from '@sinclair/typebox'
+import { ObjectIdSchema } from '../../../../common/schema/objectid.schema'
 
 export const TodoUpdateStatusRequestDTOSchema = Type.Object({
-  idList: Type.Optional(Type.Array(Type.Uint8Array())),
+  idList: Type.Optional(Type.Array(ObjectIdSchema)),
   completed: Type.Boolean(),
 })
 
