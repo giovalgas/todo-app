@@ -4,6 +4,8 @@ import env, { FastifyEnvOptions } from '@fastify/env'
 declare module 'fastify' {
   interface FastifyInstance {
     config: {
+      KAFKA_BROKER: string
+      KAFKA_GROUP_ID: string
     }
   }
 }
@@ -12,7 +14,14 @@ const schema = {
   type: 'object',
   required: [],
   properties: {
-
+    KAFKA_BROKER: {
+      type: 'string',
+      default: '127.0.0.1:9092',
+    },
+    KAFKA_GROUP_ID: {
+      type: 'string',
+      default: 'todo-app',
+    },
   },
 }
 
