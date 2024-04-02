@@ -31,7 +31,7 @@ const todoRepository = function ({
           body: todo.body,
           createdAt: new Date(),
           completed: false,
-          completedAt: undefined,
+          completedAt: null,
           updatedAt: new Date(),
         })
         .then((i) => i.insertedId)
