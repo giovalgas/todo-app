@@ -27,7 +27,7 @@ import {
   ObjectIdSchema,
   ObjectIdType,
 } from '../../../common/schema/objectid.schema'
-import kafkaProducer from '../util/todo-kafka.util'
+import kafkaProducer from '../hooks/todo-kafka.hook'
 
 declare module 'fastify' {
   interface FastifyInstance {
