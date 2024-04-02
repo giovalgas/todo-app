@@ -22,6 +22,10 @@ const schema = {
       type: 'string',
       default: 'todo-app',
     },
+    PORT: {
+      type: 'number',
+      default: 3001,
+    },
   },
 }
 
