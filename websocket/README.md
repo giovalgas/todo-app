@@ -1,24 +1,23 @@
-# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
+### Websocket
 
-This project was bootstrapped with Fastify-CLI.
+#### Todo module:
 
-## Available Scripts
+Connect using the following URI:
+```
+ws://$APP_URL/ws/todo
+```
+Everytime a 'todo' gets updated/created the following message will be broadcasted:
 
-In the project directory, you can run:
-
-### `npm run dev`
-
-To start the app in dev mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm start`
-
-For production mode
-
-### `npm run test`
-
-Run the test cases.
-
-## Learn More
-
-To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+```json
+{
+  "type": "CREATE | UPDATE",
+  "payload": {
+    "body": "DESCRIPTION",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-04-02T05:59:57.978Z",
+    "updatedAt": "2024-04-02T05:59:57.978Z",
+    "_id": "660b9edddcb7a0696d3b9ff4"
+  }
+}
+```

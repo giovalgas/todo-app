@@ -1,5 +1,9 @@
 ### trial-copera.ai
 
+#### Docs
+- Backend -> https://giovalgas.github.io/trial-copera.ai/
+- Websocket -> https://github.com/giovalgas/trial-copera.ai/tree/main/websocket
+
 #### Requirements
 - Node 20.12
 - Yarn
