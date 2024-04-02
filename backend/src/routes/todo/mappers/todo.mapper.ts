@@ -6,9 +6,9 @@ const todoMapper = {
     return {
       ...entity,
       _id: entity._id?.toHexString(),
-      updatedAt: entity.updatedAt.toDateString(),
-      createdAt: entity.createdAt.toDateString(),
-      completedAt: entity.completedAt?.toDateString(),
+      updatedAt: entity.updatedAt.toISOString(),
+      createdAt: entity.createdAt.toISOString(),
+      completedAt: entity.completedAt?.toISOString() ?? null,
     }
   },
 }
