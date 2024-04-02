@@ -9,6 +9,7 @@ declare module 'fastify' {
       DB_HOST: string
       DB_PORT: string
       DB_DATABASE: string
+      KAFKA_BROKER: string
     }
   }
 }
@@ -36,6 +37,10 @@ const schema = {
     DB_DATABASE: {
       type: 'string',
       default: 'todo-app',
+    },
+    KAFKA_BROKER: {
+      type: 'string',
+      default: '127.0.0.1:9092',
     },
   },
 }

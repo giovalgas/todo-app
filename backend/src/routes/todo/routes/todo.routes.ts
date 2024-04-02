@@ -27,6 +27,7 @@ import {
   ObjectIdSchema,
   ObjectIdType,
 } from '../../../common/schema/objectid.schema'
+import kafkaProducer from '../util/todo-kafka.util'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -68,6 +69,7 @@ const todoRoutes: FastifyPluginAsync = async (
   fastify.post<{ Body: TodoRequestDTO; Reply: TodoResponseDTO }>(
     '/',
     {
+      onSend: kafkaProducer({ type: 'CREATE', fastify: fastify }),
       schema: {
         body: TodoRequestDTOSchema,
         response: {
@@ -87,6 +89,7 @@ const todoRoutes: FastifyPluginAsync = async (
   }>(
     '/:id',
     {
+      onSend: kafkaProducer({ type: 'UPDATE', fastify: fastify }),
       schema: {
         body: TodoRequestDTOSchema,
         response: { 200: TodoResponseDTOSchema },
@@ -110,6 +113,7 @@ const todoRoutes: FastifyPluginAsync = async (
   }>(
     '/update-status/:id',
     {
+      onSend: kafkaProducer({ type: 'UPDATE', fastify: fastify }),
       schema: {
         body: TodoUpdateStatusRequestDTOSchema,
         response: { 200: TodoResponseDTOSchema },
@@ -129,6 +133,7 @@ const todoRoutes: FastifyPluginAsync = async (
   fastify.patch<{ Body: TodoUpdateStatusRequestDTO; Reply: TodoResponseDTO[] }>(
     '/update-status',
     {
+      onSend: kafkaProducer({ type: 'UPDATE', fastify: fastify }),
       schema: {
         body: TodoUpdateStatusRequestDTOSchema,
         response: { 200: Type.Array(TodoResponseDTOSchema) },
