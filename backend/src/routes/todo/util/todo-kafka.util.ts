@@ -14,7 +14,10 @@ const kafkaProducer =
   async (_request, _reply, payload) => {
     fastify.kafka.push({
       topic: TODO_TOPIC,
-      payload: JSON.stringify({ type, payload }),
+      payload: JSON.stringify({
+        type: type,
+        payload: JSON.parse(payload as string),
+      }),
       key: crypto.randomBytes(1).toString('hex'),
       partition: 0,
     })
