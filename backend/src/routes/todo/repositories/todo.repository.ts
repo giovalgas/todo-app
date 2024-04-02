@@ -72,7 +72,7 @@ const todoRepository = function ({
         throw Error(`No todos by the id: ${id} where found.`)
       }
 
-      return updatedDocument!
+      return updatedDocument
     },
 
     updateTodoDescription: async (
@@ -94,7 +94,7 @@ const todoRepository = function ({
         throw Error(`No todos by the id: ${id} where found.`)
       }
 
-      return updatedDocument!
+      return updatedDocument
     },
 
     deleteTodo: (id: ObjectIdType) => {
