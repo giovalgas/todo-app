@@ -5,7 +5,11 @@ export default async (fastify: FastifyInstance): Promise<void> => {
   // For some weird reason @fastify/kafka doesnt provide proper typings for consumers
   // @ts-ignore
   fastify.kafka.subscribe([TODO_TOPIC]).on(TODO_TOPIC, (msg, commit) => {
-    console.log(msg.value.toString())
+    fastify.websocketServer.clients.forEach((client) => {
+      if (client.readyState === 1) {
+        client.send(msg.value.toString())
+      }
+    })
     commit()
   })
 
