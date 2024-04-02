@@ -28,6 +28,10 @@ import {
   ObjectIdType,
 } from '../../../common/schema/objectid.schema'
 import kafkaProducer from '../hooks/todo-kafka.hook'
+import {
+  TodoCountResponseDTO,
+  TodoCountResponseDTOSchema,
+} from '../dtos/response/todo-count-response.dto'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -63,6 +67,18 @@ const todoRoutes: FastifyPluginAsync = async (
     },
     async function (request, reply) {
       return reply.send(await this.todoService.findTodos(request.query))
+    }
+  )
+
+  fastify.get<{ Reply: TodoCountResponseDTO }>(
+    '/statistics',
+    {
+      schema: {
+        response: { 200: TodoCountResponseDTOSchema },
+      },
+    },
+    async function (_request, reply) {
+      return reply.send(await this.todoService.findTodoStatistics())
     }
   )
 

@@ -10,11 +10,13 @@ import { TodoUpdateStatusRequestDTO } from '../dtos/request/todo-update-status-r
 import { TodoDeleteRequestDTO } from '../dtos/request/todo-delete-request.dto'
 import { ObjectIdType } from '../../../common/schema/objectid.schema'
 import todoMapper from '../mappers/todo.mapper'
+import { TodoCountResponseDTO } from '../dtos/response/todo-count-response.dto'
 
 export interface TodoService {
   findTodos: (
     requestDTO: PaginationDTO
   ) => Promise<Page<typeof TodoResponseDTOSchema>>
+  findTodoStatistics: () => Promise<TodoCountResponseDTO>
   createTodo: (requestDTO: TodoRequestDTO) => Promise<TodoResponseDTO>
   batchDeleteTodos: (requestDTO: TodoDeleteRequestDTO) => void
   updateTodoDescription: (
@@ -37,6 +39,10 @@ const todoService = function ({
   todoRepository: TodoRepository
 }): TodoService {
   return {
+    findTodoStatistics: async function (): Promise<TodoCountResponseDTO> {
+      return await todoRepository.findTodoStatistics()
+    },
+
     findTodos: async function (
       requestDTO: PaginationDTO
     ): Promise<Page<typeof TodoResponseDTOSchema>> {

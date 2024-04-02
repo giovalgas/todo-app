@@ -3,6 +3,7 @@ import { TodoRequestDTO } from '../dtos/request/todo-request-dto'
 import { PaginationDTO } from '../../../common/page/dto/pagination.dto'
 import { ObjectIdType } from '../../../common/schema/objectid.schema'
 import TodoEntity from '../../../entities/todo.entity'
+import { TodoCountResponseDTO } from '../dtos/response/todo-count-response.dto'
 
 export interface TodoRepository {
   createTodo: (todo: TodoRequestDTO) => Promise<TodoEntity>
@@ -17,6 +18,7 @@ export interface TodoRepository {
     id: ObjectIdType,
     newDescription: string
   ) => Promise<TodoEntity>
+  findTodoStatistics: () => Promise<TodoCountResponseDTO>
 }
 
 const todoRepository = function ({
@@ -25,6 +27,27 @@ const todoRepository = function ({
   collection: mongodb.Collection<TodoEntity>
 }): TodoRepository {
   return {
+    findTodoStatistics: async (): Promise<TodoCountResponseDTO> => {
+      const result = await collection
+        .aggregate([
+          {
+            $group: {
+              _id: null,
+              count: { $sum: 1 },
+              countCompleted: {
+                $sum: { $cond: [{ $eq: ['$completed', true] }, 1, 0] },
+              },
+              countUncompleted: {
+                $sum: { $cond: [{ $eq: ['$completed', false] }, 1, 0] },
+              },
+            },
+          },
+        ])
+        .toArray()
+
+      return result[0] as TodoCountResponseDTO
+    },
+
     createTodo: async (todo: TodoRequestDTO): Promise<TodoEntity> => {
       const insertedId = await collection
         .insertOne({
