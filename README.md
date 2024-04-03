@@ -1,8 +1,8 @@
-### trial-copera.ai
+### todo-app
 
 #### Docs
-- Backend -> https://giovalgas.github.io/trial-copera.ai/
-- Websocket -> https://github.com/giovalgas/trial-copera.ai/tree/main/websocket
+- Backend -> https://giovalgas.github.io/todo-app/
+- Websocket -> https://github.com/giovalgas/todo-app/tree/main/websocket
 
 #### Requirements
 - Node 20.12
